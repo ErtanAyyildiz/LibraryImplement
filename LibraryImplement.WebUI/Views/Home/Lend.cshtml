@@ -1,0 +1,45 @@
+﻿@model int
+
+@{
+    ViewData["Title"] = "Lend";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <h2 class="mb-4">Kitabı Ödünç Ver</h2>
+            <div class="text-center mb-4">
+                <!-- Kitap görseli çerçevesi -->
+                <div style="border: 2px solid #ddd; padding: 10px; max-width: 200px; margin: 0 auto;">
+                    <!-- Kitap görseli -->
+                    <img src="@ViewBag.BookImage" alt="Kitap Resmi" style="max-width: 100%; max-height: 200px;" />
+                </div>
+            </div>
+            <form asp-controller="Home" asp-action="Lend" method="post">
+                <input type="hidden" name="bookId" value="@Model" />
+                <div class="form-group">
+                    <label for="alaninAdi">Ödünç Alanın Adı</label>
+                    <input type="text" id="barrowName" name="barrowName" class="form-control" required />
+                </div>
+                <div class="form-group">
+                    <label for="geriGetirmeTarihi">Geri Getirme Tarihi</label>
+                    <input type="date" id="dueDate" name="dueDate" class="form-control" required min="@DateTime.Now.ToString("yyyy-MM-dd")" />
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary">Kitabı Ödünç Ver</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+
+<script>
+    // Şu anki tarihi al
+    var suAnkiTarih = new Date().toISOString().split('T')[0];
+
+    // Tarih girişinin min değerini (en küçük değer) şu anki tarih olarak ayarla
+    document.getElementById("geriGetirmeTarihi").setAttribute("min", suAnkiTarih);
+</script>

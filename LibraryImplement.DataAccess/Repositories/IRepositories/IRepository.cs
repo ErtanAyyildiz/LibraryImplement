@@ -10,6 +10,6 @@ namespace RailwayStation.DataAccess.Repositories.IRepositories
 
         List<T> GetList();
         List<T> GetListByFilter(Expression<Func<T, bool>> filter);
-        T GetByID(int id);
+        T? GetByID(int id);
     }
 }

@@ -1,8 +1,99 @@
-﻿@{
+﻿@using X.PagedList.Mvc.Core
+@using X.PagedList
+
+@model IPagedList<BookListDTO>
+
+@{
     ViewData["Title"] = "Home Page";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-12">
+            <a asp-controller="Home" asp-action="CreateBook" class="btn btn-primary mb-3">
+                <i class="fas fa-plus"></i> Yeni Kitap Oluştur
+            </a>
+            <table class="table table-bordered table-hover">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>Kitap Adı</th>
+                        <th>Yazar</th>
+                        <th>Durum</th>
+                        <th>Resim</th>
+                        <th>İşlemler</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var book in Model)
+                    {
+                        <tr>
+                            <td>@book.Title</td>
+                            <td>@book.Author</td>
+                            <td>
+                                @if (book.IsInLibrary)
+                                {
+                                    <span class="badge badge-success">Kütüphanede</span>
+                                }
+                                else
+                                {
+                                    <span class="badge badge-danger">Dışarıda</span>
+                                    @if (DateTime.Now > book.BorrowedBooks.FirstOrDefault().DueDate)
+                                    {
+                                        <span class="text-danger font-weight-bold">(Tarihi Geçti)</span>
+                                    }
+                                }
+                            </td>
+                            <td class="text-center">
+                                <img src="@book.ImagePath" alt="Kitap Resmi" style="max-width: 100px; max-height: 100px;" />
+                            </td>
+                            <td>
+                                @if (book.IsInLibrary)
+                                {
+                                    <a asp-controller="Home" asp-action="Lend" asp-route-kitapId="@book.Id" class="btn btn-success">
+                                        <i class="fas fa-handshake"></i> Ödünç Ver
+                                    </a>
+                                }
+                                else
+                                {
+                                    <div>
+                                        <span class="font-weight-bold">Ödünç Alan:</span> @book.BorrowedBooks.FirstOrDefault().BorrowerName
+                                    </div>
+                                    <div>
+                                        <span class="font-weight-bold">Geri Getirme Tarihi:</span>
+                                        <span class="@(DateTime.Now > book.BorrowedBooks.FirstOrDefault().DueDate ? "text-danger" : "")">
+                                            @book.BorrowedBooks.FirstOrDefault().DueDate.ToString("dd.MM.yyyy")
+                                        </span>
+                                    </div>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+            <div class="text-center">
+                <ul class="pagination">
+                    @if (Model.HasPreviousPage)
+                    {
+                        <li class="page-item">
+                            <a class="page-link" href="@Url.Action("Index", new { page = Model.PageNumber - 1 })">Geri</a>
+                        </li>
+                    }
+                    @for (int i = 1; i <= Model.PageCount; i++)
+                    {
+                        <li class="page-item @(i == Model.PageNumber ? "active" : "")">
+                            <a class="page-link" href="@Url.Action("Index", new { page = i })">@i</a>
+                        </li>
+                    }
+                    @if (Model.HasNextPage)
+                    {
+                        <li class="page-item">
+                            <a class="page-link" href="@Url.Action("Index", new { page = Model.PageNumber + 1 })">İleri</a>
+                        </li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
 </div>

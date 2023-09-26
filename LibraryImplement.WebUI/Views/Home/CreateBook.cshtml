@@ -1,0 +1,33 @@
+﻿@model BookCreateDTO
+
+@{
+    ViewData["Title"] = "CreateBook";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <h2 class="mb-4">Yeni Kitap Ekle</h2>
+            <form asp-controller="Home" asp-action="CreateBook" method="post" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label for="Title">Kitap Adı</label>
+                    <input type="text" id="Title" name="Title" asp-for="Title" class="form-control" required />
+                </div>
+                <div class="form-group">
+                    <label for="Author">Yazar</label>
+                    <input type="text" id="Author" name="Author" asp-for="Author" class="form-control" required />
+                </div>
+                <div class="form-group">
+                    <label for="ImageFile"><small class="text-muted">*Lütfen yükleyeceğiniz resmin 1:1 oranında olduğundan emin olun.</small></label>
+                    <input type="file" id="ImageFile" name="ImageFile" class="form-control-file" required accept=".jpg, .jpeg, .png" />
+                    @Html.ValidationMessage("ImageFile", "Lütfen sadece .jpg, .jpeg veya .png uzantılı dosyaları yükleyin.", new { @class = "text-danger" })
+                </div>
+
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary">Kitap Ekle</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

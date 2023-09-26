@@ -1,9 +1,6 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using LibraryImplement.Business.Abstracts;
+using LibraryImplement.Business.Concretes;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace LibraryImplement.Business.IoC
 {
@@ -11,8 +8,8 @@ namespace LibraryImplement.Business.IoC
     {
         public static IServiceCollection AddBusinessServices(this IServiceCollection services)
         {
-
-
+            services.AddScoped<IBookService, BookService>();
+            services.AddScoped<IBorrowedBookService, BorrowedBookService>();
 
             return services;
         }

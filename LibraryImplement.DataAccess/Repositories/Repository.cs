@@ -1,5 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
-using RailwayStation.DataAccess.Database;
+﻿using LibraryImplement.DataAccess.Database;
+using Microsoft.EntityFrameworkCore;
 using RailwayStation.DataAccess.Repositories.IRepositories;
 using System.Linq.Expressions;
 
@@ -7,10 +7,10 @@ namespace RailwayStation.DataAccess.Repositories
 {
     public class Repository<T> : IRepository<T> where T : class
     {
-        private readonly RailwayStationContext _db;
+        private readonly LibraryDBContext _db;
         internal DbSet<T> dbSet;
 
-        public Repository(RailwayStationContext db)
+        public Repository(LibraryDBContext db)
         {
             _db = db;
             this.dbSet = _db.Set<T>();
@@ -21,7 +21,7 @@ namespace RailwayStation.DataAccess.Repositories
             dbSet.AddAsync(entity);
         }
 
-        public T GetByID(int id)
+        public T? GetByID(int id)
         {
             return dbSet.Find(id);
         }
